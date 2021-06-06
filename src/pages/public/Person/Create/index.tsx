@@ -1,9 +1,10 @@
 import { AlertMessage } from "components";
 import React, { useState } from "react";
 import { Modal, Button, Form, Col, Image, Spinner } from "react-bootstrap";
-import { COLORS, images } from "../../../../constants";
-import { PostPerson } from "../../../../services/person";
+import { COLORS, images } from "constants/index";
+import { PostPerson } from "services/person";
 import { useForm } from "react-hook-form";
+import { IPerson } from "interfaces/index";
 
 interface Iprops {
   show: boolean;
@@ -12,25 +13,15 @@ interface Iprops {
 }
 
 const CreatePerson: React.FC<Iprops> = (props) => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IPerson>();
 
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string>();
   const [showError, setShowError] = useState<boolean>();
-  const [validated, setValidated] = useState(false);
-  const [name, setName] = useState<string>();
-  const [cpf, setCPF] = useState<string>();
-  const [cep, setCEP] = useState<string>();
-  const [address, setAddress] = useState<string>();
-  const [district, setDistrict] = useState<string>();
-  const [city, setCity] = useState<string>();
-  const [UF, setUF] = useState<string>();
-  const [phone, setPhone] = useState<string>();
-  const [cnpj, setCNPJ] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [bank, setBank] = useState<string>();
-  const [account, setAccount] = useState<string>();
-  const [agency, setAgency] = useState<string>();
   const [type, setType] = useState<string>("F");
 
   function changeType(value: boolean) {
@@ -38,33 +29,11 @@ const CreatePerson: React.FC<Iprops> = (props) => {
     setType(isType);
   }
 
-  const handleOnSubmit = async (event: any) => {
-    event.preventDefault();
-    setLoading(true);
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-    setValidated(true);
+  const handleOnSubmit = async (person: IPerson) => {
+    console.log(person);
+    console.log(errors);
 
-    const data = await PostPerson(
-      name,
-      cpf,
-      address,
-      district,
-      city,
-      UF,
-      phone,
-      cnpj,
-      email,
-      bank,
-      account,
-      agency,
-      cep,
-      type
-    );
+    const data = await PostPerson(person);
     console.log(data);
     if (data.name) {
       setLoading(false);
@@ -97,7 +66,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
             error={apiError}
           />
         ) : (
-          <Form noValidate validated={validated} onSubmit={handleOnSubmit}>
+          <Form onSubmit={handleSubmit(handleOnSubmit)} noValidate>
             <Modal.Header closeButton>
               <Modal.Title
                 style={{
@@ -117,6 +86,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                     type="switch"
                     id="custom-switch"
                     label="Pessoa Juridica"
+                    {...register("type")}
                     onChange={(e: any) => changeType(e.target.checked)}
                   />
                 </div>
@@ -127,8 +97,8 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridName">
                   <Form.Label>Nome</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setName(e.target.value)}
+                    style={{ borderColor: errors.name ? COLORS.red : null }}
+                    {...register("name", { required: true })}
                     type="text"
                     placeholder="Nome Completo"
                   />
@@ -137,21 +107,38 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                   <Form.Group as={Col} controlId="formGridCPF">
                     <Form.Label>CPF</Form.Label>
                     <Form.Control
+                      style={{ borderColor: errors.CPF ? COLORS.red : null }}
                       required
-                      onChange={(e: any) => setCPF(e.target.value)}
+                      {...register("CPF", {
+                        required: type === "F" ? true : false,
+                        maxLength: 14,
+                        // eslint-disable-next-line no-useless-escape
+                        pattern: /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/,
+                      })}
                       type="text"
-                      placeholder="CPF"
+                      placeholder="000.000.000-00"
                     />
+                    {errors.CPF ? (
+                      <div style={{ color: COLORS.redFont }}>CPF Invalido</div>
+                    ) : null}
                   </Form.Group>
                 ) : (
                   <Form.Group as={Col} controlId="formGridCNPJ">
                     <Form.Label>CNPJ</Form.Label>
                     <Form.Control
-                      required
-                      onChange={(e: any) => setCNPJ(e.target.value)}
+                      style={{ borderColor: errors.cnpj ? COLORS.red : null }}
+                      {...register("cnpj", {
+                        required: type === "J" ? true : false,
+                        maxLength: 18,
+                        // eslint-disable-next-line no-useless-escape
+                        pattern: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/,
+                      })}
                       type="text"
-                      placeholder="CNPJ"
+                      placeholder="00.000.000/0000-00"
                     />
+                    {errors.cnpj ? (
+                      <div style={{ color: COLORS.redFont }}>CNPJ Inválido</div>
+                    ) : null}
                   </Form.Group>
                 )}
               </Form.Row>
@@ -159,21 +146,25 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridPhone">
                   <Form.Label>telefone</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setPhone(e.target.value)}
                     type="tel"
                     placeholder="(00)0-0000-0000"
+                    {...register("phone", { required: true, maxLength: 14 })}
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setEmail(e.target.value)}
+                    style={{ borderColor: errors.email ? COLORS.red : null }}
                     type="email"
                     placeholder="Email"
+                    {...register("email", {
+                      pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    })}
                   />
+                  {errors.email ? (
+                    <div style={{ color: COLORS.redFont }}>Email inválido</div>
+                  ) : null}
                 </Form.Group>
               </Form.Row>
 
@@ -181,18 +172,27 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridCEP">
                   <Form.Label>CEP</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setCEP(e.target.value)}
+                    style={{ borderColor: errors.cep ? COLORS.red : null }}
+                    {...register("cep", {
+                      required: true,
+                      maxLength: 10,
+                      pattern: /^[0-9]{5}-[\d]{3}$/i,
+                    })}
                     type="text"
                     placeholder="00000-000"
                   />
+                  {errors.cep ? (
+                    <div style={{ color: COLORS.redFont }}>CEP Inválido</div>
+                  ) : null}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridDistrict">
                   <Form.Label>Bairro</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setDistrict(e.target.value)}
+                    {...register("district", {
+                      required: true,
+                      maxLength: 155,
+                    })}
                     type="text"
                     placeholder="Bairro"
                   />
@@ -202,8 +202,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
               <Form.Group controlId="formGridAddress">
                 <Form.Label>Endereço</Form.Label>
                 <Form.Control
-                  required
-                  onChange={(e: any) => setAddress(e.target.value)}
+                  {...register("address", { required: true, maxLength: 200 })}
                   type="text"
                   placeholder="Rua 01, qd 10 Nº 23"
                 />
@@ -213,8 +212,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridCity">
                   <Form.Label>Cidade</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setCity(e.target.value)}
+                    {...register("city", { required: true, maxLength: 200 })}
                     type="text"
                     placeholder="Cidade"
                   />
@@ -223,18 +221,37 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridUF">
                   <Form.Label>Estado</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setUF(e.target.value)}
+                    {...register("uf", { required: true, maxLength: 2 })}
                     as="select"
                     defaultValue="Escolha o estado..."
                   >
-                    <option>Escolha...</option>
-                    <option>Ma</option>
-                    <option>PI</option>
-                    <option>PE</option>
-                    <option>SP</option>
-                    <option>RJ</option>
+                    <option>AC</option>
+                    <option>AL</option>
+                    <option>AM</option>
+                    <option>AP</option>
+                    <option>BA</option>
+                    <option>CE</option>
+                    <option>DF</option>
+                    <option>ES</option>
+                    <option>GO</option>
+                    <option>MA</option>
+                    <option>MG</option>
                     <option>MT</option>
+                    <option>MS</option>
+                    <option>PA</option>
+                    <option>PB</option>
+                    <option>PE</option>
+                    <option>PI</option>
+                    <option>PR</option>
+                    <option>RN</option>
+                    <option>RO</option>
+                    <option>RJ</option>
+                    <option>RR</option>
+                    <option>RS</option>
+                    <option>SC</option>
+                    <option>SE</option>
+                    <option>SP</option>
+                    <option>TO</option>
                   </Form.Control>
                 </Form.Group>
               </Form.Row>
@@ -243,8 +260,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridBank">
                   <Form.Label>Banco</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setBank(e.target.value)}
+                    {...register("bank", { required: false, maxLength: 45 })}
                     placeholder="Banco"
                   />
                 </Form.Group>
@@ -252,8 +268,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridAgency">
                   <Form.Label>Agência</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setAgency(e.target.value)}
+                    {...register("agency", { required: false, maxLength: 45 })}
                     placeholder="Agência"
                   />
                 </Form.Group>
@@ -261,8 +276,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 <Form.Group as={Col} controlId="formGridAccount">
                   <Form.Label>Conta Corrente</Form.Label>
                   <Form.Control
-                    required
-                    onChange={(e: any) => setAccount(e.target.value)}
+                    {...register("account", { required: false, maxLength: 45 })}
                     placeholder="Conta Corrente"
                   />
                 </Form.Group>
@@ -279,7 +293,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 />
                 Cancelar
               </Button>
-              <Button variant="primary" type="submit" onClick={handleSubmit}>
+              <Button variant="primary" type="submit">
                 {loading ? (
                   <>
                     <Spinner

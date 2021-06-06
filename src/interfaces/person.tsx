@@ -13,6 +13,7 @@ export interface IPerson {
   account: string;
   agency: string;
   type: string;
+  cep: string;
 }
 
 export interface IPersons extends Array<IPerson> {}
