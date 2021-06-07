@@ -1,24 +1,28 @@
 import { AlertMessage } from "components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Col, Image, Spinner } from "react-bootstrap";
 import { COLORS, images } from "constants/index";
-import { PostPerson } from "services/person";
+import { PostPerson, GetPerson, PutPerson } from "services/person";
 import { useForm } from "react-hook-form";
 import { IPerson } from "interfaces/index";
+import { personDefault } from "interfaces/person";
 
 interface Iprops {
   show: boolean;
   setShow: any;
   handlerUpdateList: any;
+  idPerson?: number;
 }
 
 const CreatePerson: React.FC<Iprops> = (props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
+    reset,
+    setValue,
   } = useForm<IPerson>();
-
+  const [person, SetPerson] = useState<IPerson>();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string>();
   const [showError, setShowError] = useState<boolean>();
@@ -29,12 +33,34 @@ const CreatePerson: React.FC<Iprops> = (props) => {
     setType(isType);
   }
 
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset(personDefault);
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  useEffect(() => {
+    async function fetchPerson(id: number) {
+      const data = await GetPerson(id);
+      SetPerson(data);
+      setValue("phone", "(98)992044217");
+    }
+    if (props.idPerson) {
+      fetchPerson(props.idPerson);
+      /*  setValue("phone", person?.phone, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      }); */
+    }
+  }, [props.idPerson, setValue, person]);
+
   const handleOnSubmit = async (person: IPerson) => {
     console.log(person);
     console.log(errors);
 
-    const data = await PostPerson(person);
-    console.log(data);
+    const data = person.id ? await PutPerson(person) : await PostPerson(person);
+
     if (data.name) {
       setLoading(false);
       props.handlerUpdateList();
@@ -107,9 +133,9 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                   <Form.Group as={Col} controlId="formGridCPF">
                     <Form.Label>CPF</Form.Label>
                     <Form.Control
-                      style={{ borderColor: errors.CPF ? COLORS.red : null }}
+                      style={{ borderColor: errors.cpf ? COLORS.red : null }}
                       required
-                      {...register("CPF", {
+                      {...register("cpf", {
                         required: type === "F" ? true : false,
                         maxLength: 14,
                         // eslint-disable-next-line no-useless-escape
@@ -118,7 +144,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                       type="text"
                       placeholder="000.000.000-00"
                     />
-                    {errors.CPF ? (
+                    {errors.cpf ? (
                       <div style={{ color: COLORS.redFont }}>CPF Invalido</div>
                     ) : null}
                   </Form.Group>

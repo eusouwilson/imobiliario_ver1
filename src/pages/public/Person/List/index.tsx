@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, Image } from "react-bootstrap";
 import { images, COLORS } from "constants/index";
 import { ListBuilding, CreatePerson } from "../../index";
-import { HeaderForm } from "components/";
+import { HeaderForm, Pagination } from "components/";
 
 import { Container } from "./styles";
-import { GetPerson, SearchPersonByName } from "services/person";
+import { GetPersons, SearchPersonByName } from "services/person";
 import { IPersons, IPerson } from "interfaces/person";
 
 const ListPerson: React.FC = () => {
@@ -13,9 +13,12 @@ const ListPerson: React.FC = () => {
   const [showBuilding, setShowBuilding] = useState(false);
   const [person, setPerson] = useState<IPersons>();
   const [name, setName] = useState<string>();
+  const [idPerson, setIdPerson] = useState<number>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   async function fetchPerson() {
-    const data = await GetPerson();
+    const data = await GetPersons();
     setPerson(data);
   }
 
@@ -34,6 +37,16 @@ const ListPerson: React.FC = () => {
     fetchPerson();
   }, []);
 
+  function editPerson(id: number) {
+    setIdPerson(id);
+    setShow(true);
+  }
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItem = person?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalItems: any = person?.length;
   return (
     <Container>
       <HeaderForm
@@ -48,6 +61,7 @@ const ListPerson: React.FC = () => {
         setShow={() => setShow(!show)}
         show={show}
         handlerUpdateList={fetchPerson}
+        idPerson={idPerson}
       />
       <ListBuilding
         setShow={() => setShowBuilding(!showBuilding)}
@@ -70,7 +84,7 @@ const ListPerson: React.FC = () => {
             <tbody> não existe dados para exibir</tbody>
           ) : (
             <tbody style={{ padding: 5 }}>
-              {person?.map((person: IPerson) => {
+              {currentItem?.map((person: IPerson) => {
                 return (
                   <tr key={person.id}>
                     <td>{person.id}</td>
@@ -84,6 +98,7 @@ const ListPerson: React.FC = () => {
                         }}
                         variant="secondary"
                         size="sm"
+                        onClick={() => editPerson(person.id)}
                       >
                         <Image
                           src={images.edit}
@@ -138,6 +153,19 @@ const ListPerson: React.FC = () => {
             </tbody>
           )}
         </Table>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            totalItems={totalItems}
+            paginate={paginate}
+          />
+        </div>
       </div>
     </Container>
   );
