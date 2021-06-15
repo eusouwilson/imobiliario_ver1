@@ -2,7 +2,7 @@ import { AlertMessage } from "components";
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Col, Image, Spinner } from "react-bootstrap";
 import { COLORS, images } from "constants/index";
-import { PostPerson, GetPerson, PutPerson } from "services/person";
+import { PostPerson } from "services/person";
 import { useForm } from "react-hook-form";
 import { IPerson } from "interfaces/index";
 import { personDefault } from "interfaces/person";
@@ -15,14 +15,14 @@ interface Iprops {
 }
 
 const CreatePerson: React.FC<Iprops> = (props) => {
+  // const [person, SetPerson] = useState<IPerson>();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitSuccessful },
     reset,
-    setValue,
   } = useForm<IPerson>();
-  const [person, SetPerson] = useState<IPerson>();
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string>();
   const [showError, setShowError] = useState<boolean>();
@@ -39,27 +39,18 @@ const CreatePerson: React.FC<Iprops> = (props) => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     async function fetchPerson(id: number) {
       const data = await GetPerson(id);
-      SetPerson(data);
-      setValue("phone", "(98)992044217");
+      //SetPerson(data);
     }
     if (props.idPerson) {
       fetchPerson(props.idPerson);
-      /*  setValue("phone", person?.phone, {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true,
-      }); */
     }
-  }, [props.idPerson, setValue, person]);
+  }, [props]); */
 
   const handleOnSubmit = async (person: IPerson) => {
-    console.log(person);
-    console.log(errors);
-
-    const data = person.id ? await PutPerson(person) : await PostPerson(person);
+    const data = await PostPerson(person);
 
     if (data.name) {
       setLoading(false);

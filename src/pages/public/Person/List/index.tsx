@@ -16,6 +16,7 @@ const ListPerson: React.FC = () => {
   const [idPerson, setIdPerson] = useState<number>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [proprietary, setProprietary] = useState<IPerson>();
 
   async function fetchPerson() {
     const data = await GetPersons();
@@ -37,9 +38,14 @@ const ListPerson: React.FC = () => {
     fetchPerson();
   }, []);
 
-  function editPerson(id: number) {
+  function editPerson(id: any) {
     setIdPerson(id);
     setShow(true);
+  }
+
+  function getBuilding(proprietary: IPerson) {
+    setShowBuilding(true);
+    setProprietary(proprietary);
   }
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -63,10 +69,13 @@ const ListPerson: React.FC = () => {
         handlerUpdateList={fetchPerson}
         idPerson={idPerson}
       />
-      <ListBuilding
-        setShow={() => setShowBuilding(!showBuilding)}
-        show={showBuilding}
-      />
+      {proprietary ? (
+        <ListBuilding
+          setShow={() => setShowBuilding(!showBuilding)}
+          show={showBuilding}
+          proprietary={proprietary}
+        />
+      ) : null}
 
       {/* fim do header de busca */}
       <div style={{ backgroundColor: COLORS.white, paddingBottom: 10 }}>
@@ -98,7 +107,7 @@ const ListPerson: React.FC = () => {
                         }}
                         variant="secondary"
                         size="sm"
-                        onClick={() => editPerson(person.id)}
+                        onClick={() => editPerson(person)}
                       >
                         <Image
                           src={images.edit}
@@ -128,7 +137,7 @@ const ListPerson: React.FC = () => {
                         style={{
                           marginRight: "8px",
                         }}
-                        onClick={() => setShowBuilding(true)}
+                        onClick={() => getBuilding(person)}
                       >
                         <Image
                           src={images.house}
