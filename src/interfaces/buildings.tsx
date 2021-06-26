@@ -10,3 +10,13 @@ export interface IBuilding {
 }
 
 export interface IBuildings extends Array<IBuilding> {}
+
+export const defaultBuilding: IBuilding = {
+  address: "",
+  complement: "",
+  district: "",
+  city: "",
+  uf: "",
+  cep: "",
+  proprietary: null,
+};

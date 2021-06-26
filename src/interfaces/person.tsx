@@ -14,6 +14,8 @@ export interface IPerson {
   agency: string;
   type: string;
   cep: string;
+  nacionality: string;
+  marital_status: string;
 }
 
 export interface IPersons extends Array<IPerson> {}
@@ -33,4 +35,6 @@ export const personDefault: IPerson = {
   agency: "",
   type: "",
   cep: "",
+  nacionality: "",
+  marital_status: "",
 };

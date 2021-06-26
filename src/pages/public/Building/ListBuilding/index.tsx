@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Image, Modal } from "react-bootstrap";
+import { Button, Table, Image, Modal, Col, Row } from "react-bootstrap";
 import { images, COLORS } from "constants/index";
-import { IBuilding, IPerson } from "interfaces/index";
-import { GetBuilding } from "services/building";
-//import { HeaderForm } from "../../../../components";
+import { IBuildings, IPerson, IBuilding } from "interfaces/index";
+import { SearchBuildingByProprietary } from "services/building";
+import CreateBuilding from "../CreateBuilding/index";
 
-//import { Container } from "./styles";
 interface Iprops {
   show: boolean;
   setShow: any;
@@ -13,94 +12,120 @@ interface Iprops {
 }
 
 const ListBuilding: React.FC<Iprops> = (props) => {
-  const [building, setBuilding] = useState<IBuilding>();
-  //const [show, setShow] = useState(false);
-  useEffect(() => {
-    async function fetchBuilding(id: number) {
-      const data = await GetBuilding(id);
-      setBuilding(data);
-    }
+  const [buildings, setBuildings] = useState<IBuildings>();
+  const [showBuilding, setShowBuilding] = useState(false);
 
+  async function fetchBuilding(id: number) {
+    const data = await SearchBuildingByProprietary(id);
+    setBuildings(data);
+  }
+
+  useEffect(() => {
     fetchBuilding(props.proprietary.id);
   }, [props.proprietary.id]);
 
   return (
     <>
-      {building ? (
+      {buildings ? (
         <Modal show={props.show} onHide={props.setShow} centered size="lg">
+          <CreateBuilding
+            setShow={() => setShowBuilding(!showBuilding)}
+            show={showBuilding}
+            handlerUpdateList={() => fetchBuilding(props.proprietary.id)}
+            proprietaryId={props.proprietary.id}
+          />
           <div style={{ backgroundColor: COLORS.white, paddingBottom: 10 }}>
             <Modal.Header closeButton>
               <Modal.Title
+                as={Row}
                 style={{
                   fontSize: 24,
                   fontWeight: "bolder",
                   color: COLORS.blackLight,
+                  width: "100%",
                 }}
               >
-                {props.proprietary.name}
+                <Col sm="10">
+                  <h3>{props.proprietary.name}</h3>
+                </Col>
+                <Col
+                  sm="2"
+                  style={{ display: "flex", justifyContent: "right" }}
+                >
+                  <Button
+                    variant="success"
+                    style={{
+                      height: "40px",
+                      width: "90%",
+                    }}
+                    onClick={() => setShowBuilding(true)}
+                  >
+                    <Image
+                      src={images.add}
+                      rounded
+                      width="16"
+                      height="16"
+                      style={{ marginRight: 5 }}
+                    />
+                    Novo
+                  </Button>
+                </Col>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Table bordered hover>
                 <thead
-                  style={{ backgroundColor: COLORS.black, color: COLORS.white }}
+                  style={{
+                    backgroundColor: COLORS.black,
+                    color: COLORS.white,
+                  }}
                 >
                   <tr>
-                    <th>#</th>
                     <th>CEP</th>
                     <th>Endereço</th>
                     <th>Bairro</th>
                     <th>Cidade</th>
+                    <th>UF</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
                 <tbody style={{ padding: 5 }}>
-                  <tr>
-                    <td>{building.id}</td>
-                    <td>{building.cep}</td>
-                    <td>{building.address}</td>
-                    <td>{building.district}</td>
-                    <td>{building.city}</td>
-                    <td width="160" align="center" style={{ padding: 5 }}>
-                      <Button
-                        style={{
-                          marginRight: "8px",
-                        }}
-                        variant="secondary"
-                        size="sm"
-                      >
-                        <Image
-                          src={images.edit}
-                          rounded
-                          width="16"
-                          height="16"
-                        />
-                      </Button>
-                      <Button
-                        variant="info"
-                        size="sm"
-                        style={{
-                          marginRight: "8px",
-                        }}
-                      >
-                        <Image
-                          src={images.view}
-                          rounded
-                          width="16"
-                          height="16"
-                        />
-                      </Button>
+                  {buildings.map((building: IBuilding) => {
+                    return (
+                      <tr>
+                        <td>{building.cep}</td>
+                        <td>{building.address}</td>
+                        <td>{building.district}</td>
+                        <td>{building.city}</td>
+                        <td>{building.uf}</td>
+                        <td width="100" align="center" style={{ padding: 5 }}>
+                          <Button
+                            style={{
+                              marginRight: "8px",
+                            }}
+                            variant="secondary"
+                            size="sm"
+                          >
+                            <Image
+                              src={images.edit}
+                              rounded
+                              width="16"
+                              height="16"
+                            />
+                          </Button>
 
-                      <Button variant="info" size="sm">
-                        <Image
-                          src={images.contract}
-                          rounded
-                          width="16"
-                          height="16"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
+                          <Button variant="info" size="sm">
+                            <Image
+                              src={images.contract}
+                              rounded
+                              width="16"
+                              height="16"
+                            />
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Modal.Body>

@@ -47,24 +47,7 @@ const MenuBar: React.FC = () => {
                     </ItemMenu>
                   </Link>
                 </Nav.Link>
-                <Nav.Link>
-                  <Link
-                    style={{ textDecoration: "none", color: COLORS.gray }}
-                    to="/bulding/list"
-                  >
-                    <ItemMenu>
-                      <ImgContainer>
-                        <Image
-                          src={images.building}
-                          rounded
-                          width="32"
-                          height="32"
-                        />
-                      </ImgContainer>
-                      Imóveis
-                    </ItemMenu>
-                  </Link>
-                </Nav.Link>
+
                 <Nav.Link>
                   <Link
                     style={{ textDecoration: "none", color: COLORS.gray }}

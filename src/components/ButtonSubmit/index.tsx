@@ -1,5 +1,4 @@
 import React from "react";
-
 import { CustomButton } from "./styles";
 import { Spinner } from "react-bootstrap";
 interface Ibuttom {
@@ -8,13 +7,14 @@ interface Ibuttom {
 }
 
 const ButtonSubmit: React.FC<Ibuttom> = (props) => {
+  const { loading, title } = props;
   return (
     <div>
       <CustomButton
         variant="primary"
         size="lg"
         type="submit"
-        disabled={props.loading}
+        disabled={loading}
       >
         {props.loading ? (
           <>
@@ -28,7 +28,7 @@ const ButtonSubmit: React.FC<Ibuttom> = (props) => {
             <span className="sr-only">Carregando...</span>
           </>
         ) : (
-          <>{props.title}</>
+          <>{title}</>
         )}
       </CustomButton>
     </div>

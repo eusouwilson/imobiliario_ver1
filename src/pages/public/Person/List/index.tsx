@@ -85,7 +85,7 @@ const ListPerson: React.FC = () => {
               <th>#</th>
               <th>Nome</th>
               <th>Telefone</th>
-              <th>Email</th>
+              <th>CPF/CNPJ</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -99,7 +99,7 @@ const ListPerson: React.FC = () => {
                     <td>{person.id}</td>
                     <td>{person.name}</td>
                     <td>{person.phone}</td>
-                    <td>{person.email}</td>
+                    <td>{person.cpf ? person.cpf : person.cnpj}</td>
                     <td width="200" align="center" style={{ padding: 5 }}>
                       <Button
                         style={{

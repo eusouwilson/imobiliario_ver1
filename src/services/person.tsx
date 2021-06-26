@@ -20,6 +20,8 @@ export const PostPerson = async (person: IPerson) => {
       agency: person.agency,
       cep: person.cep,
       type: person.type ? "J" : "F",
+      nacionality: person.nacionality,
+      marital_status: person.marital_status,
     });
     return data;
   } catch (error) {
@@ -45,6 +47,8 @@ export const PutPerson = async (person: IPerson) => {
       agency: person.agency,
       cep: person.cep,
       type: person.type ? "J" : "F",
+      nacionality: person.nacionality,
+      marital_status: person.marital_status,
     });
     return data;
   } catch (error) {

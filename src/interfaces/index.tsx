@@ -1,5 +1,5 @@
-import { IAgreement, IAgreements } from "./agreements";
-import { IBuilding, IBuildings } from "./buildings";
+import { IAgreement, IAgreements, defaultAgreement } from "./agreements";
+import { IBuilding, IBuildings, defaultBuilding } from "./buildings";
 import { IImagesBulding, IImagesBuldings } from "./imagesBulding";
 import { IPerson, IPersons } from "./person";
 import { IUser, IUsers } from "./user";
@@ -16,3 +16,5 @@ export type {
   IPersons,
   IUsers,
 };
+
+export { defaultBuilding, defaultAgreement };

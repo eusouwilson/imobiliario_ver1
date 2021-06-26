@@ -1,6 +1,14 @@
 import React from "react";
-import { Card, Button, Form, Col, Row, Image } from "react-bootstrap";
-import { images } from "../../constants";
+import { images } from "constants/";
+import {
+  Container,
+  CustomButton,
+  CustomCard,
+  CustomCol,
+  CustomForm,
+  CustomImage,
+  CustomRow,
+} from "./styles";
 
 interface IProps {
   handleShowModal: any;
@@ -12,92 +20,72 @@ interface IProps {
 }
 
 const HeaderForm: React.FC<IProps> = (props) => {
+  const {
+    handleShowModal,
+    handleSearch,
+    handleCleaner,
+    title,
+    setValue,
+    value,
+  } = props;
+
   return (
-    <div>
-      <Card style={{ marginBottom: "20px" }}>
-        <Card.Header as={Row}>
-          <Col sm="10">
-            <h3>{props.title}</h3>
-          </Col>
-          <Col sm="2" style={{ display: "flex", justifyContent: "right" }}>
-            <Button
-              variant="success"
-              style={{
-                height: "40px",
-                width: "90%",
-              }}
-              onClick={props.handleShowModal}
-            >
-              <Image
-                src={images.add}
-                rounded
-                width="16"
-                height="16"
-                style={{ marginRight: 5 }}
-              />
+    <Container>
+      <CustomCard>
+        <CustomCard.Header as={CustomRow}>
+          <CustomCol sm="10">
+            <h3>{title}</h3>
+          </CustomCol>
+          <CustomCol sm="2">
+            <CustomButton variant="success" onClick={handleShowModal}>
+              <CustomImage src={images.add} rounded width="16" height="16" />
               Novo
-            </Button>
-          </Col>
-        </Card.Header>
-        <Card.Body style={{ justifyContent: "center" }}>
-          <Form
-            onSubmit={(e) => {
+            </CustomButton>
+          </CustomCol>
+        </CustomCard.Header>
+        <CustomCard.Body style={{ justifyContent: "center" }}>
+          <CustomForm
+            onSubmit={(e: any) => {
               e.preventDefault();
             }}
           >
-            <Form.Group as={Row} controlId="formPlaintextPassword">
-              <Col sm="8">
-                <Form.Control
+            <CustomForm.Group as={CustomRow} controlId="formPlaintextPassword">
+              <CustomCol sm="8">
+                <CustomForm.Control
                   type="Buscar"
                   placeholder="Buscar..."
-                  value={props.value}
-                  onChange={(e: any) => props.setValue(e.target.value)}
+                  value={value}
+                  onChange={(e: any) => setValue(e.target.value)}
                 />
-              </Col>
-              <Col sm="2">
-                <Button
-                  variant="danger"
-                  style={{
-                    height: "40px",
-                    width: "90%",
-                  }}
-                  onClick={props.handleCleaner}
-                >
-                  <Image
+              </CustomCol>
+              <CustomCol sm="2">
+                <CustomButton variant="danger" onClick={handleCleaner}>
+                  <CustomImage
                     src={images.cleaner}
                     rounded
                     width="16"
                     height="16"
-                    style={{ marginRight: 5 }}
                   />
                   Limpar
-                </Button>
-              </Col>
+                </CustomButton>
+              </CustomCol>
 
-              <Col sm="2">
-                <Button
-                  variant="primary"
-                  style={{
-                    height: "40px",
-                    width: "90%",
-                  }}
-                  onClick={props.handleSearch}
-                >
-                  <Image
+              <CustomCol sm="2">
+                <CustomButton variant="primary" onClick={handleSearch}>
+                  <CustomImage
                     src={images.search}
                     rounded
                     width="16"
                     height="16"
-                    style={{ marginRight: 5 }}
                   />
                   Buscar
-                </Button>
-              </Col>
-            </Form.Group>
-          </Form>
-        </Card.Body>
-      </Card>
-    </div>
+                </CustomButton>
+              </CustomCol>
+            </CustomForm.Group>
+          </CustomForm>
+        </CustomCard.Body>
+      </CustomCard>
+    </Container>
   );
 };
 

@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { Button, Spinner } from "react-bootstrap";
 
-//import { SIZES, COLORS } from "../../constants";
-
 export const Container = styled.div``;
 
 export const CustomButton = styled(Button)`

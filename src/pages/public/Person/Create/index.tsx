@@ -160,12 +160,48 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                 )}
               </Form.Row>
               <Form.Row>
+                <Form.Group as={Col} controlId="formGridMaritalStatus">
+                  <Form.Label>Estado civil,</Form.Label>
+                  <Form.Control
+                    {...register("marital_status", {
+                      required: true,
+                    })}
+                    as="select"
+                    defaultValue="Escolha uma opção."
+                  >
+                    <option>Solteiro</option>
+                    <option>Casado</option>
+                    <option>Separado</option>
+                    <option>Divorciado</option>
+                    <option>Viúvo</option>
+                  </Form.Control>
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridNacionality">
+                  <Form.Label>Nacionalidade</Form.Label>
+                  <Form.Control
+                    style={{
+                      borderColor: errors.nacionality ? COLORS.red : null,
+                    }}
+                    type="text"
+                    placeholder="Nacionalidade"
+                    {...register("nacionality", { required: true })}
+                  />
+                  {errors.nacionality ? (
+                    <div style={{ color: COLORS.redFont }}>
+                      Nacionalidade não pode ser nulo
+                    </div>
+                  ) : null}
+                </Form.Group>
+              </Form.Row>
+
+              <Form.Row>
                 <Form.Group as={Col} controlId="formGridPhone">
                   <Form.Label>telefone</Form.Label>
                   <Form.Control
                     type="tel"
                     placeholder="(00)0-0000-0000"
-                    {...register("phone", { required: true, maxLength: 14 })}
+                    {...register("phone", { required: false, maxLength: 14 })}
                   />
                 </Form.Group>
 
@@ -191,7 +227,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                   <Form.Control
                     style={{ borderColor: errors.cep ? COLORS.red : null }}
                     {...register("cep", {
-                      required: true,
+                      required: false,
                       maxLength: 10,
                       pattern: /^[0-9]{5}-[\d]{3}$/i,
                     })}
@@ -207,7 +243,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
                   <Form.Label>Bairro</Form.Label>
                   <Form.Control
                     {...register("district", {
-                      required: true,
+                      required: false,
                       maxLength: 155,
                     })}
                     type="text"
@@ -219,7 +255,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
               <Form.Group controlId="formGridAddress">
                 <Form.Label>Endereço</Form.Label>
                 <Form.Control
-                  {...register("address", { required: true, maxLength: 200 })}
+                  {...register("address", { required: false, maxLength: 200 })}
                   type="text"
                   placeholder="Rua 01, qd 10 Nº 23"
                 />

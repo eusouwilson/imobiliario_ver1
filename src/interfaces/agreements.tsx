@@ -9,3 +9,12 @@ export interface IAgreement {
 }
 
 export interface IAgreements extends Array<IAgreement> {}
+
+export const defaultAgreement: IAgreement = {
+  end_data: null,
+  initial_data: null,
+  value: null,
+  building: null,
+  tenant: null,
+  resident: null,
+};

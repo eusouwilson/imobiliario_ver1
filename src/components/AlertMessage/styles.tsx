@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Alert } from "react-bootstrap";
+import { COLORS } from "constants/";
 
 export const Container = styled.div`
   display: flex;
@@ -11,9 +12,9 @@ export const Container = styled.div`
 `;
 
 export const CustomAlert = styled(Alert)`
-  background-color: #e0e0e0;
+  background-color: ${COLORS.lightGray};
 `;
 
 export const Heading = styled(Alert.Heading)`
-  background-color: #e0e0e0;
+  background-color: ${COLORS.lightGray};
 `;

@@ -1,9 +1,6 @@
 import React from "react";
 import { Button, Table, Image, Modal } from "react-bootstrap";
-import { images, COLORS } from "../../../../constants";
-//import { HeaderForm } from "../../../../components";
-
-//import { Container } from "./styles";
+import { images, COLORS } from "constants/";
 interface Iprops {
   show: boolean;
   setShow: any;
