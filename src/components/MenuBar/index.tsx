@@ -3,7 +3,7 @@ import { Navbar, Nav, Container, Image, Button } from "react-bootstrap";
 import { images, COLORS } from "../../constants/";
 import { ImgContainer, ItemMenu } from "./styles";
 import { useAuth } from "hooks/Auth";
-import { BtnContainer } from "../MenuBar/styles";
+import { BtnContainer } from "./styles";
 import { Link } from "react-router-dom";
 
 const MenuBar: React.FC = () => {

@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
-
-import { api } from "./auth";
+import { api } from "./server";
 import { IPerson } from "../interfaces/person";
 
-export const PostPerson = async (person: IPerson) => {
+export const postPerson = async (person: IPerson) => {
   try {
     const { data } = await api.post("person", {
       name: person.name,
@@ -30,7 +29,7 @@ export const PostPerson = async (person: IPerson) => {
   }
 };
 
-export const PutPerson = async (person: IPerson) => {
+export const putPerson = async (person: IPerson) => {
   try {
     const { data } = await api.put(`person/${person.id}`, {
       name: person.name,
@@ -57,7 +56,7 @@ export const PutPerson = async (person: IPerson) => {
   }
 };
 
-export const GetPersons = async () => {
+export const getPersons = async () => {
   try {
     const { data } = await api.get("person");
     return data;
@@ -67,7 +66,7 @@ export const GetPersons = async () => {
   }
 };
 
-export const SearchPersonByName = async (name: string) => {
+export const searchPersonByName = async (name: string) => {
   try {
     const { data } = await api.get(`person/searchByName/${name}`);
     return data;
@@ -77,7 +76,7 @@ export const SearchPersonByName = async (name: string) => {
   }
 };
 
-export const GetPerson = async (id: number) => {
+export const getPerson = async (id: number) => {
   try {
     const { data } = await api.get(`person/${id}`);
     return data;

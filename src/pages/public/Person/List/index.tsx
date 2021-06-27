@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, Image } from "react-bootstrap";
 import { images, COLORS } from "constants/index";
 import { ListBuilding, CreatePerson } from "../../index";
-import { HeaderForm, Pagination } from "components/";
+import { HeaderSearch, Pagination } from "components/";
 
 import { Container } from "./styles";
-import { GetPersons, SearchPersonByName } from "services/person";
+import { getPersons, searchPersonByName } from "services/person";
 import { IPersons, IPerson } from "interfaces/person";
 
 const ListPerson: React.FC = () => {
@@ -19,13 +19,13 @@ const ListPerson: React.FC = () => {
   const [proprietary, setProprietary] = useState<IPerson>();
 
   async function fetchPerson() {
-    const data = await GetPersons();
+    const data = await getPersons();
     setPerson(data);
   }
 
   async function searchByName() {
     if (!name) return;
-    const data = await SearchPersonByName(name);
+    const data = await searchPersonByName(name);
     setPerson(data);
   }
 
@@ -55,12 +55,12 @@ const ListPerson: React.FC = () => {
   const totalItems: any = person?.length;
   return (
     <Container>
-      <HeaderForm
-        handleShowModal={() => setShow(true)}
-        handleSearch={searchByName}
+      <HeaderSearch
+        handlerShowModal={() => setShow(true)}
+        handlerSearch={searchByName}
         setValue={setName}
         title="Lista de Pessoas"
-        handleCleaner={ClearSearch}
+        handlerCleaner={ClearSearch}
         value={name}
       />
       <CreatePerson

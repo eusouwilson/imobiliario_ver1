@@ -1,11 +1,11 @@
 import React from "react";
-interface paginateData {
+interface IPagenation {
   itemsPerPage: number;
   totalItems: number;
   paginate(number: number): void;
 }
 
-const Pagination: React.FC<paginateData> = ({
+const Pagination: React.FC<IPagenation> = ({
   itemsPerPage,
   totalItems,
   paginate,

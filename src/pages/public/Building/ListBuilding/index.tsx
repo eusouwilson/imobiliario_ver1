@@ -2,37 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Button, Table, Image, Modal, Col, Row } from "react-bootstrap";
 import { images, COLORS } from "constants/index";
 import { IBuildings, IPerson, IBuilding } from "interfaces/index";
-import { SearchBuildingByProprietary } from "services/building";
+import { searchBuildingByProprietary } from "services/building";
 import CreateBuilding from "../CreateBuilding/index";
 
 interface Iprops {
   show: boolean;
-  setShow: any;
+  setShow(value: boolean): void;
   proprietary: IPerson;
 }
 
 const ListBuilding: React.FC<Iprops> = (props) => {
+  const { proprietary, setShow, show } = props;
+
   const [buildings, setBuildings] = useState<IBuildings>();
   const [showBuilding, setShowBuilding] = useState(false);
 
   async function fetchBuilding(id: number) {
-    const data = await SearchBuildingByProprietary(id);
+    const data = await searchBuildingByProprietary(id);
     setBuildings(data);
   }
 
   useEffect(() => {
-    fetchBuilding(props.proprietary.id);
-  }, [props.proprietary.id]);
+    fetchBuilding(proprietary.id);
+  }, [proprietary.id]);
 
   return (
     <>
       {buildings ? (
-        <Modal show={props.show} onHide={props.setShow} centered size="lg">
+        <Modal show={show} onHide={setShow} centered size="lg">
           <CreateBuilding
             setShow={() => setShowBuilding(!showBuilding)}
             show={showBuilding}
-            handlerUpdateList={() => fetchBuilding(props.proprietary.id)}
-            proprietaryId={props.proprietary.id}
+            handlerUpdateList={() => fetchBuilding(proprietary.id)}
+            proprietaryId={proprietary.id}
           />
           <div style={{ backgroundColor: COLORS.white, paddingBottom: 10 }}>
             <Modal.Header closeButton>
@@ -46,7 +48,7 @@ const ListBuilding: React.FC<Iprops> = (props) => {
                 }}
               >
                 <Col sm="10">
-                  <h3>{props.proprietary.name}</h3>
+                  <h3>{proprietary.name}</h3>
                 </Col>
                 <Col
                   sm="2"

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Alert } from "react-bootstrap";
-import { COLORS } from "constants/";
+import { COLORS } from "constants/index";
 
 export const Container = styled.div`
   display: flex;

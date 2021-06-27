@@ -2,7 +2,7 @@ import { AlertMessage } from "components";
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Col, Image, Spinner } from "react-bootstrap";
 import { COLORS, images } from "constants/index";
-import { PostPerson } from "services/person";
+import { postPerson } from "services/person";
 import { useForm } from "react-hook-form";
 import { IPerson } from "interfaces/index";
 import { personDefault } from "interfaces/person";
@@ -50,7 +50,7 @@ const CreatePerson: React.FC<Iprops> = (props) => {
   }, [props]); */
 
   const handleOnSubmit = async (person: IPerson) => {
-    const data = await PostPerson(person);
+    const data = await postPerson(person);
 
     if (data.name) {
       setLoading(false);

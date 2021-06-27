@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 
-import { api } from "./auth";
+import { api } from "./server";
 import { IBuilding } from "interfaces/index";
 
-export const PostBuilding = async (building: IBuilding) => {
+export const postBuilding = async (building: IBuilding) => {
   try {
     const { data } = await api.post("building", {
       address: building.address,
@@ -21,7 +21,7 @@ export const PostBuilding = async (building: IBuilding) => {
   }
 };
 
-export const PutBuilding = async (building: IBuilding) => {
+export const putBuilding = async (building: IBuilding) => {
   try {
     const { data } = await api.put(`building/${building.id}`, {
       address: building.address,
@@ -39,7 +39,7 @@ export const PutBuilding = async (building: IBuilding) => {
   }
 };
 
-export const GetBuildings = async () => {
+export const getBuildings = async () => {
   try {
     const { data } = await api.get("building");
     return data;
@@ -49,7 +49,7 @@ export const GetBuildings = async () => {
   }
 };
 
-export const SearchBuildingByProprietary = async (proprietary: number) => {
+export const searchBuildingByProprietary = async (proprietary: number) => {
   try {
     const { data } = await api.get(`building/search/${proprietary}`);
     return data;
@@ -59,7 +59,7 @@ export const SearchBuildingByProprietary = async (proprietary: number) => {
   }
 };
 
-export const GetBuilding = async (id: number) => {
+export const getBuilding = async (id: number) => {
   try {
     const { data } = await api.get(`building/${id}`);
     return data;

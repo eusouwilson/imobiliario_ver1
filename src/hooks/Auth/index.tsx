@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState, useMemo } from "react";
-import { fetchLogin, api } from "services/auth";
+import { getLogin } from "services/auth";
+import { api } from "services/server";
 
 import { IUser } from "interfaces/user";
 interface authContextData {
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   async function singIn(email: string, password: string, remember: boolean) {
     setLoading(true);
-    const data = await fetchLogin(email, password);
+    const data = await getLogin(email, password);
 
     if (data.user) {
       const { user } = data;

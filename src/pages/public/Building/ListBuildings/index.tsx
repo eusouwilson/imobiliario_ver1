@@ -7,8 +7,6 @@ interface Iprops {
 }
 
 const ListBuilding: React.FC<Iprops> = (props) => {
-  //const [show, setShow] = useState(false);
-
   return (
     <>
       <Modal show={props.show} onHide={props.setShow} centered size="lg">

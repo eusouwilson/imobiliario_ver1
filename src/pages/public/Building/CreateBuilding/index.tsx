@@ -4,7 +4,8 @@ import { Modal, Button, Form, Col, Image, Spinner } from "react-bootstrap";
 import { COLORS, images } from "constants/index";
 import { useForm } from "react-hook-form";
 import { IBuilding, defaultBuilding } from "interfaces/index";
-import { PostBuilding } from "services/building";
+import { postBuilding } from "services/building";
+import { ModalTitle } from "./styles";
 
 interface Iprops {
   show: boolean;
@@ -14,6 +15,8 @@ interface Iprops {
 }
 
 const CreateBuilding: React.FC<Iprops> = (props) => {
+  const { show, setShow, handlerUpdateList, proprietaryId } = props;
+
   const {
     register,
     handleSubmit,
@@ -21,6 +24,7 @@ const CreateBuilding: React.FC<Iprops> = (props) => {
     reset,
     setValue,
   } = useForm<IBuilding>();
+
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string>();
   const [showError, setShowError] = useState<boolean>();
@@ -32,16 +36,15 @@ const CreateBuilding: React.FC<Iprops> = (props) => {
   }, [isSubmitSuccessful, reset]);
 
   useEffect(() => {
-    setValue("proprietary", props.proprietaryId);
-  }, [props.proprietaryId, setValue]);
+    setValue("proprietary", proprietaryId);
+  }, [proprietaryId, setValue]);
 
   const handleOnSubmit = async (building: IBuilding) => {
-    const data = await PostBuilding(building);
-    console.log(data);
+    const data = await postBuilding(building);
     if (data.id) {
       setLoading(false);
-      props.handlerUpdateList();
-      props.setShow(false);
+      handlerUpdateList();
+      setShow(false);
     } else {
       if (!data.message.response) {
         setApiError(`Erro: ${data.message}`);
@@ -61,7 +64,7 @@ const CreateBuilding: React.FC<Iprops> = (props) => {
 
   return (
     <>
-      <Modal show={props.show} onHide={props.setShow} centered>
+      <Modal show={show} onHide={setShow} centered>
         {showError ? (
           <AlertMessage
             show={showError}
@@ -71,21 +74,7 @@ const CreateBuilding: React.FC<Iprops> = (props) => {
         ) : (
           <Form onSubmit={handleSubmit(handleOnSubmit)} noValidate>
             <Modal.Header closeButton>
-              <Modal.Title
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  fontSize: 24,
-                  fontWeight: "bolder",
-                  color: COLORS.blackLight,
-                  alignItems: "center",
-                }}
-              >
-                Nova Imóvel
-                <div
-                  style={{ fontSize: 16, fontWeight: 400, marginLeft: "5vw" }}
-                ></div>
-              </Modal.Title>
+              <ModalTitle>Novo Imóvel</ModalTitle>
             </Modal.Header>
             <Modal.Body>
               <Form.Row>
@@ -193,7 +182,7 @@ const CreateBuilding: React.FC<Iprops> = (props) => {
               </Form.Row>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="danger" onClick={props.setShow}>
+              <Button variant="danger" onClick={setShow}>
                 <Image
                   src={images.close}
                   rounded

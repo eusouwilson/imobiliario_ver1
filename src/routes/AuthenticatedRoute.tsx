@@ -2,7 +2,6 @@ import React from "react";
 import { Switch } from "react-router-dom";
 import {
   SignIn,
-  Home,
   CreatePerson,
   CreateBuilding,
   ListBuilding,
@@ -35,8 +34,6 @@ const AuthenticatedRoute: React.FC = () => {
         exact
         component={ListBuilding}
       />
-
-      <CustomRoute path="/home" isPrivate={true} component={Home} />
 
       <CustomRoute path="/login" component={SignIn} />
     </Switch>

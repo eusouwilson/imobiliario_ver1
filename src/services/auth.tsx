@@ -1,12 +1,7 @@
 /* eslint-disable camelcase */
-import axios from "axios";
+import { api } from "./server";
 
-export const api = axios.create({
-  //baseURL: "https://apiimobiliario.mnem.org.br",
-  baseURL: "http://127.0.0.1:3333",
-});
-
-export const fetchLogin = async (email: string, password: string) => {
+export const getLogin = async (email: string, password: string) => {
   try {
     const { data } = await api.post("login", {
       email,

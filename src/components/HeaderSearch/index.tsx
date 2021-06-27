@@ -1,5 +1,5 @@
 import React from "react";
-import { images } from "constants/";
+import { images } from "constants/index";
 import {
   Container,
   CustomButton,
@@ -11,19 +11,19 @@ import {
 } from "./styles";
 
 interface IProps {
-  handleShowModal: any;
-  handleSearch: any;
-  handleCleaner: any;
+  handlerShowModal(): void;
+  handlerSearch(): void;
+  handlerCleaner(): void;
   title: string;
-  setValue: any;
-  value: any;
+  setValue(value: any): void;
+  value: string | number;
 }
 
-const HeaderForm: React.FC<IProps> = (props) => {
+const HeaderSearch: React.FC<IProps> = (props) => {
   const {
-    handleShowModal,
-    handleSearch,
-    handleCleaner,
+    handlerShowModal,
+    handlerSearch,
+    handlerCleaner,
     title,
     setValue,
     value,
@@ -37,7 +37,7 @@ const HeaderForm: React.FC<IProps> = (props) => {
             <h3>{title}</h3>
           </CustomCol>
           <CustomCol sm="2">
-            <CustomButton variant="success" onClick={handleShowModal}>
+            <CustomButton variant="success" onClick={handlerShowModal}>
               <CustomImage src={images.add} rounded width="16" height="16" />
               Novo
             </CustomButton>
@@ -59,7 +59,7 @@ const HeaderForm: React.FC<IProps> = (props) => {
                 />
               </CustomCol>
               <CustomCol sm="2">
-                <CustomButton variant="danger" onClick={handleCleaner}>
+                <CustomButton variant="danger" onClick={handlerCleaner}>
                   <CustomImage
                     src={images.cleaner}
                     rounded
@@ -71,7 +71,7 @@ const HeaderForm: React.FC<IProps> = (props) => {
               </CustomCol>
 
               <CustomCol sm="2">
-                <CustomButton variant="primary" onClick={handleSearch}>
+                <CustomButton variant="primary" onClick={handlerSearch}>
                   <CustomImage
                     src={images.search}
                     rounded
@@ -89,4 +89,4 @@ const HeaderForm: React.FC<IProps> = (props) => {
   );
 };
 
-export default HeaderForm;
+export default HeaderSearch;
