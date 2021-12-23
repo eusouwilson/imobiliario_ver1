@@ -22,7 +22,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
   useMemo(() => {
     const localStoragedData = async () => {
-      const userStoraged = await localStorage.getItem("@RImobiliario:user");
+      const userStoraged = await localStorage.getItem("@RNImobiliario:user");
 
       if (userStoraged) {
         setUser(JSON.parse(userStoraged));

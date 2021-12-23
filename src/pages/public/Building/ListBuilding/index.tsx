@@ -7,7 +7,7 @@ import CreateBuilding from "../CreateBuilding/index";
 
 interface Iprops {
   show: boolean;
-  setShow(value: boolean): void;
+  setShow(): void;
   proprietary: IPerson;
 }
 
